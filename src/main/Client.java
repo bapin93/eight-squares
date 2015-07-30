@@ -3,14 +3,22 @@ package main;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * @author andres
+ *
+ */
 public class Client {
 
+	/**
+	 * @param args
+	 * @throws InterruptedException
+	 */
 	public static void main(String[] args) throws InterruptedException {
 		Scanner scan = new Scanner(System.in);
 		boolean solved = false;
 		double timeStart = 0;
 		double timeElapsed = 0;
-		Builder b = new Builder();
+		Builder builder = new Builder();
 		Node node = new Node();
 		
 		System.out.print("1 - Enter custom board\n2 - Generate a random board\nEnter menu choce -->");
@@ -28,7 +36,6 @@ public class Client {
 			String boardString = "";
 			for(int i = 0; i < tryThis.length; i++){
 				int num = scan.nextInt();
-				
 				while (temp.contains(num + "")) {
 					System.out.println("You already input that number. Slect another");
 					num = scan.nextInt();
@@ -47,7 +54,7 @@ public class Client {
 				System.out.println("Input the next number");
 			}
 			node.setBoard(tryThis);
-			node.calcHeuristic();
+			node.calculateHeuristic();
 			break;
 		case 2:
 			break;	
@@ -56,36 +63,40 @@ public class Client {
 			System.out.println("Board not solvable...\nGenerating new board...");
 			node = new Node();
 			node.setPathCost(0);
-			node.setAction("NULL");
+			node.setAction(null);
 		}
-		b.addNode(node);
-		if(checkSolution(b))
+		builder.addNode(node);
+		if(checkSolution(builder))
 			solved = true;
 		else{
 			System.out.println("Solving Puzzle...");
-			b.split(node);
+			builder.split(node);
 			timeStart = System.currentTimeMillis();
 			while(!solved){
-				if(checkSolution(b))
+				if(checkSolution(builder))
 					solved = true;
 				else{
-					for(Node n : b.getSplitList()){
-						if(compareBoards(b.getNotSplitList().get(0).getBoard(), n.getBoard())){
-							b.getNotSplitList().remove(0);
+					for(Node n : builder.getSplitList()){
+						if(compareBoards(builder.getNotSplitList().get(0).getBoard(), n.getBoard())){
+							builder.getNotSplitList().remove(0);
 						}
 					}
-					b.split(b.getNotSplitList().get(0));
+					builder.split(builder.getNotSplitList().get(0));
 				}
-			}//END WHILE
-		}//END ELSE
+			}
+		}
 		double timeStop = System.currentTimeMillis();
 	    timeElapsed = (timeStop - timeStart)/1000; 
 		System.out.println("Found Solution in: " + timeElapsed + " seconds");
-		System.out.println(getActions(b.getNotSplitList().get(0)));
+		System.out.println(getActions(builder.getNotSplitList().get(0)));
 		System.out.println(node.toString());
 		scan.close();
-	}//END MAIN
+	}
 
+	/**
+	 * @param n
+	 * @return
+	 */
 	public static String getActions(Node n){
 		ArrayList<String> actionString = new ArrayList<String>();
 		while(n.getParent() != null){
@@ -99,6 +110,11 @@ public class Client {
 		return returnString;
 	}
 
+	/**
+	 * @param a1
+	 * @param a2
+	 * @return
+	 */
 	public static boolean compareBoards(int[] a1, int[] a2){
 		boolean same = true;
 		int count = 0;
@@ -113,6 +129,10 @@ public class Client {
 		return same;
 	}
 
+	/**
+	 * @param b
+	 * @return
+	 */
 	public static boolean checkSolution(Builder b){
 		boolean solved = false;
 		int count = 0;
