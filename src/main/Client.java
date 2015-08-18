@@ -14,6 +14,8 @@ public class Client {
 	 * @throws InterruptedException
 	 */
 	public static void main(String[] args) throws InterruptedException {
+		@SuppressWarnings("unused")
+		SquaresView sv = new SquaresView();
 		Scanner scan = new Scanner(System.in);
 		boolean solved = false;
 		double timeStart = 0;
@@ -31,29 +33,29 @@ public class Client {
 		switch(menuChoice){
 		case 1:
 			String temp = "";
-			int[] tryThis = new int [9];
+			int[] customBoard = new int [9];
 			System.out.println("Input the first number");
 			String boardString = "";
-			for(int i = 0; i < tryThis.length; i++){
+			for(int i = 0; i < customBoard.length; i++){
 				int num = scan.nextInt();
 				while (temp.contains(num + "")) {
-					System.out.println("You already input that number. Slect another");
+					System.out.println("You already input that number. Select another");
 					num = scan.nextInt();
 				}
-				tryThis[i] = num;
+				customBoard[i] = num;
 				temp += "" + num;
 				
 				boardString = "";
-				for(int j = 0; j < tryThis.length - (8-i); j++){
+				for(int j = 0; j < customBoard.length - (8-i); j++){
 					if(j % 3 == 0)
-						boardString += "\n" + tryThis[j] + " ";
+						boardString += "\n" + customBoard[j] + " ";
 					else
-						boardString += tryThis[j] + " ";
+						boardString += customBoard[j] + " ";
 				}
 				System.out.println(boardString);
 				System.out.println("Input the next number");
 			}
-			node.setBoard(tryThis);
+			node.setBoard(customBoard);
 			node.calculateHeuristic();
 			break;
 		case 2:

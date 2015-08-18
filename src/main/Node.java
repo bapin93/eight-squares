@@ -23,7 +23,7 @@ public class Node implements Comparable{
 		_heuristic = 0;
 		_pathCost = 0;
 		_parent = null;
-		_action = "NULL";
+		_action = null;
 		
 		Random random = new Random();
 		String temp = "";
@@ -183,7 +183,7 @@ public class Node implements Comparable{
 			else
 				boardString += _board[i] + " ";
 		}
-		returnString = "Heuristic: " + getHeuristic() + "\nAction: " + getAction() + boardString + "\n";
+		returnString = "Heuristic: " + getHeuristic() + boardString + "\n";
 		return returnString;
 	}
 }
